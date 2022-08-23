@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Scoped CSS Variables and JS</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </head>
 <body>
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
-
   <div class="controls">
     <label for="spacing">Spacing:</label>
     <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
@@ -15,12 +15,27 @@
     <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
 
     <label for="base">Base Color</label>
-    <input id="base" type="color" name="base" value="#ffc600">
+    <input id="base" type="color" name="base" value="#ff0000">
   </div>
 
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+    :root {
+      --base: #ff0000;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
 
     /*
       misc styles, nothing to do with CSS variables
@@ -35,6 +50,10 @@
       font-size: 50px;
     }
 
+    a {
+      color: var(--base);
+    }
+
     .controls {
       margin-bottom: 50px;
     }
@@ -45,6 +64,12 @@
   </style>
 
   <script>
+    function handleUpdate() {
+      const suffix = this.dataset.sizing || '';
+      $("html").get(0).style.setProperty("--"+this.name, ""+this.value+suffix);
+    }
+    $(".controls input").change(handleUpdate);
+    $(".controls input").mousemove(handleUpdate);
   </script>
 
 </body>
