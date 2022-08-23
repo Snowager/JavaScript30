@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>JS + CSS Clock</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </head>
 <body>
 
@@ -62,12 +63,64 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.2s;
+      transition-timing-function: cubic-bezier(0, -0.88, 0, 2.1);
+    }
+
+    .second-hand {
+      box-shadow: 3px 3px 5px;
+      background-color: rgb(241, 170, 170);
+      z-index: 1;
+    }
+
+    .min-hand {
+      box-shadow: 4px 4px 5px;
+      background-color: rgb(73, 167, 255);
+      z-index: 2;
+    }
+
+    .hour-hand {
+      box-shadow: 1px 1px 5px;
+      background-color: rgb(255, 255, 195);
+      z-index: 3;
     }
 
   </style>
 
   <script>
-
+    function setDate() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const minutes = now.getMinutes();
+      const hours = now.getHours();
+      const secondsDegrees = ((seconds / 60) * 360) + 90;
+      const minutesDegrees = ((minutes / 60) * 360) + 90;
+      const hoursDegrees = ((hours / 12) * 360) + 90;
+      if (seconds == 0) {
+        $('.second-hand').css("transition", "0s");
+      } else {
+        $('.second-hand').css("transition", "0.2s");
+      }
+      if (minutes == 0) {
+        $('.min-hand').css("transition", "0s");
+      } else {
+        $('.min-hand').css("transition", "0.2s");
+      }
+      if (hours == 0) {
+        $('.hour-hand').css("transition", "0s");
+      } else {
+        $('.hour-hand').css("transition", "0.2s");
+      }
+      $('.second-hand').css("transform", "rotate("+secondsDegrees+"deg)");
+      console.log(seconds);
+      $('.minute-hand').css("transform", "rotate("+minutesDegrees+"deg)");
+      console.log(minutes);
+      $('.hour-hand').css("transform", "rotate("+hoursDegrees+"deg)");
+      console.log(hours);
+    }
+    setInterval(setDate, 1000);
 
   </script>
 </body>
