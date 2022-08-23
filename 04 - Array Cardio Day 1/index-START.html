@@ -37,17 +37,39 @@
     
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    function checkBirth(inventor) {
+      return inventor.year >= 1500 && inventor.year <=1600;
+    }
+
+    const inventorsBorn1500 = inventors.filter(checkBirth)
+    console.log(inventorsBorn1500);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    function returnFullName(inventor) {
+      return [inventor.first,inventor.last].join(" ");
+    }
+
+    const inventorsFullNames = inventors.map(returnFullName);
+    console.log(inventorsFullNames);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const inventorsByOldest = inventors.sort((a, b) => a.year > b.year ? 1 : -1);
+    console.table(inventorsByOldest);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    function addYears(total, inventor) {
+      return total + (inventor.passed - inventor.year);
+    }
+    
+    const totalYearsLived = inventors.reduce(addYears, 0)
+    console.log(totalYearsLived);
 
     // 5. Sort the inventors by years lived
+    const inventorsByYearsLived = inventors.sort((a, b) => (a.passed-a.year) > (b.passed-b.year)? -1 : 1);
+    console.table(inventorsByYearsLived);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
@@ -55,10 +77,56 @@
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const peopleByLastName = people.sort(function(lastOne, nextOne) {
+      const [aLast, aFirst] = lastOne.split(", ");
+      const [bLast, bFirst] = nextOne.split(", ");
+      return aLast > bLast ? 1 : -1;
+    })
+    console.log(peopleByLastName);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const sortedData = data.sort();
+    console.log(sortedData);
+    
+    function sortInstances(sortedArray) {
+      let counter = 1;
+      let instanceList = []
+      for (x = 0; x < sortedArray.length-1; x++) {
+        let num = x;
+        let instance = sortedArray[x];
+        let pointer = sortedArray[x+1];
+        if (instance == pointer) {
+          counter++;
+        } else {
+          instanceList.push({type:instance, amount:counter});
+          counter = 1;
+        }
+        if (num+1 == sortedArray.length-1) {
+          if (instance == pointer) {
+            instanceList.push({type:instance, amount:counter});
+          } else {
+            instanceList.push({type:instance, amount:counter});
+            instanceList.push({type:pointer, amount:1})  
+          }
+          break;
+        }
+      }
+      return instanceList;
+    }
+
+    const instanceList = sortedData.reduce(function(obj, item) {
+      if (!obj[item]) {
+        obj[item] = 0;
+      }
+      obj[item]++;
+      return obj;
+    }, {});
+
+    console.log(instanceList);
+
+    //console.log(sortInstances(sortedData).sort((a, b) => b.amount > a.amount ? 1 : -1));
 
   </script>
 </body>
